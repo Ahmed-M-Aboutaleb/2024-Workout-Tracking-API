@@ -1,38 +1,28 @@
 version: '3.5'
 
 services:
-  db:
-    image: mongo
-    container_name: workout-db
-    restart: always
-    ports:
-      - '27017:27017'
-    volumes:
-      - dbdata:/data/db
-    networks:
-      - workout-net
+  mongo:
+    image: mongo:7.0
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${DB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodata:/data/db
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: workout-app
-    environment:
-      - PORT=${PORT}
+    volumes:
+      - ./src:/app/src
+    env_file:
+      - .env
     ports:
       - ${PORT}:${PORT}
-    networks:
-      - workout-net
     depends_on:
-      - db
-    volumes:
-      - .:/usr/src/app
+      - mongo
 
 volumes:
-  dbdata:
-
-networks:
-  workout-net:
-    driver: bridge
+  mongodata:
+    driver: local

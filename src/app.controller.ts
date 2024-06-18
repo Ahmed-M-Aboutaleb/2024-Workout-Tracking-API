@@ -1,12 +1,16 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Res } from '@nestjs/common';
 import { AppService } from './app.service';
+import { Response } from 'express';
 
-@Controller()
+@Controller({
+  version: '1',
+})
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  async getHello(@Res() res: Response) {
+    const message = await this.appService.getStatus();
+    return res.status(200).send({ message: message });
   }
 }
