@@ -6,7 +6,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { SetsModule } from './sets/sets.module';
+import { WorkoutsModule } from './workouts/workouts.module';
 
 const ENV = process.env.NODE_ENV;
 
@@ -22,7 +22,7 @@ console.log('ENV', ENV);
     ThrottlerModule.forRoot([{ limit: 10, ttl: 60 }]),
     UsersModule,
     AuthModule,
-    SetsModule,
+    WorkoutsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
