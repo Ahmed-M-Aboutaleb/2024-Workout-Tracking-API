@@ -65,8 +65,11 @@ class AppBootstrap {
   private setupSwagger() {
     const config = new DocumentBuilder()
       .setTitle('Workout Tracker API')
-      .setDescription('The Workout Tracker API description')
+      .setDescription(
+        'Here is the API documentation for the Workout Tracker Project.',
+      )
       .setVersion('1.0')
+      .addBearerAuth()
       .build();
     const document = SwaggerModule.createDocument(this.app, config);
     SwaggerModule.setup('api', this.app, document);

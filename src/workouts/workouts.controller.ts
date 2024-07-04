@@ -15,7 +15,10 @@ import { Types } from 'mongoose';
 import { RolesGuard } from '../roles/roles.guard';
 import { Role } from '../roles/roles.decorator';
 import { Roles } from '../roles/roles.enum';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Workouts')
+@ApiBearerAuth()
 @Controller({ version: '1', path: 'workouts' })
 export class WorkoutsController {
   constructor(private readonly workoutsService: WorkoutsService) {}

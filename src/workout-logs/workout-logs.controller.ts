@@ -11,7 +11,10 @@ import { WorkoutLogsService } from './workout-logs.service';
 import { CreateWorkoutLogDto } from './dto/create-workout-log.dto';
 import { UpdateWorkoutLogDto } from './dto/update-workout-log.dto';
 import { Types } from 'mongoose';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Workout Logs')
+@ApiBearerAuth()
 @Controller({
   version: '1',
   path: 'workout-logs',
