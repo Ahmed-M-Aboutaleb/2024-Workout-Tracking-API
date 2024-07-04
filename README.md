@@ -1,73 +1,104 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Workout Tracker API Project
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is a RESTful API project developed with NestJS, MongoDB, Docker and Swagger for documentation. The project allows users to track their workouts and create routines.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- User authentication
+- CRUD operations for workouts, routines, logs and more
+- Swagger documentation for API endpoints
+- Dockerized deployment for easy setup and scalability
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Prerequisites
 
-## Installation
+Before running the project, make sure you have the following installed:
+
+- Node.js
+- MongoDB
+- Docker
+- Yarn
+
+## Getting Started
+
+1. Clone the repository:
 
 ```bash
-$ yarn install
+git clone https://github.com/Ahmed-M-Aboutaleb/2024-Workout-Tracking-API.git
 ```
 
-## Running the app
+2. Install dependencies:
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+cd 2024-Workout-Tracking-API
+yarn
 ```
 
-## Test
+3. Set up environment variables:
+
+Create a `.env`, `.env.development` and `.env.test` files in the root directory and add the following:
+
+```plaintext
+PORT=<Your API Port>
+DB_USER=<Your DB Username>
+DB_PASSWORD=<Your DB Password>
+DB_URI=<Your DB URL>
+JWT_SECRET=<JWT Token Secret>
+```
+
+4. Start the MongoDB server:
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+mongod
 ```
 
-## Support
+5. Start the application:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+yarn run start:dev
+```
 
-## Stay in touch
+6. Access the API documentation:
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Open your browser and go to `http://localhost:<PORT>/api`
+
+### Docker
+
+To run the application in a Docker container, follow these steps:
+
+1. Build the Docker Compose file:
+
+```bash
+docker compose up --build
+```
+
+2. Access the API documentation:
+
+Open your browser and go to `http://localhost:<PORT>/api`
+
+## Testing
+
+To run the tests, use the following command:
+
+```bash
+yarn test
+```
+
+To generate a test coverage report, use the following command:
+
+```bash
+yarn test:cov
+```
+
+To run the e2e tests, use the following command:
+
+```bash
+yarn test:e2e
+```
+
+## Contributing
+
+Contributions are welcome! If you find any issues or have suggestions for improvement, please open an issue or submit a pull request.
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+This project is licensed under the [MIT License](LICENSE).
