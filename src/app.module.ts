@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { WorkoutsModule } from './workouts/workouts.module';
+import { WorkoutLogsModule } from './workout-logs/workout-logs.module';
 
 const ENV = process.env.NODE_ENV;
 
@@ -23,6 +24,7 @@ console.log('ENV', ENV);
     UsersModule,
     AuthModule,
     WorkoutsModule,
+    WorkoutLogsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

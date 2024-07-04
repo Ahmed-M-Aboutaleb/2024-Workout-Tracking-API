@@ -7,6 +7,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { IsArrayValidRule } from './validators/rules/IsArrayValidRule';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { IsWorkoutExistsRule } from './validators/rules/IsWorkoutExists';
+import { PayloadVerifier, TokenExtractor } from '../roles/roles.guard';
+import { JwtService } from '@nestjs/jwt';
 
 describe('WorkoutsController', () => {
   let controller: WorkoutsController;
@@ -27,7 +29,14 @@ describe('WorkoutsController', () => {
         ]),
       ],
       controllers: [WorkoutsController],
-      providers: [WorkoutsService, IsArrayValidRule, IsWorkoutExistsRule],
+      providers: [
+        WorkoutsService,
+        IsArrayValidRule,
+        IsWorkoutExistsRule,
+        TokenExtractor,
+        PayloadVerifier,
+        JwtService,
+      ],
     }).compile();
 
     controller = module.get<WorkoutsController>(WorkoutsController);
