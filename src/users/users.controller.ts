@@ -16,6 +16,7 @@ import { RolesGuard } from '../roles/roles.guard';
 import { Roles } from '../roles/roles.enum';
 import { Role } from '../roles/roles.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -24,29 +25,33 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   @UseGuards(RolesGuard)
-  @Role(Roles.Admin)
+  @Role(Roles.ADMIN)
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   @UseGuards(RolesGuard)
-  @Role(Roles.Admin)
+  @Role(Roles.ADMIN)
   findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   @UseGuards(RolesGuard)
-  @Role(Roles.Admin)
+  @Role(Roles.ADMIN)
   findOne(@Param('id') id: Types.ObjectId) {
     return this.usersService.findOne(id);
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   @UseGuards(RolesGuard)
-  @Role(Roles.Admin)
+  @Role(Roles.ADMIN)
   update(
     @Param('id') id: Types.ObjectId,
     @Body() updateUserDto: UpdateUserDto,
@@ -55,9 +60,10 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   @UseGuards(RolesGuard)
-  @Role(Roles.Admin)
-  remove(@Param('id') id: Types.ObjectId) {
+  @Role(Roles.ADMIN)
+  delete(@Param('id') id: Types.ObjectId) {
     return this.usersService.delete(id);
   }
 }

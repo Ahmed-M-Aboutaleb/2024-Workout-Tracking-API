@@ -87,7 +87,7 @@ describe('WorkoutsService', () => {
       expect(updatedWorkout).toHaveProperty('equipment', 'Barbell');
     });
     it('should delete a workout', async () => {
-      const deletedWorkout = await service.remove(createdWorkout._id);
+      const deletedWorkout = await service.delete(createdWorkout._id);
       expect(deletedWorkout).toBeDefined();
       expect(deletedWorkout).toHaveProperty('_id', createdWorkout._id);
     });

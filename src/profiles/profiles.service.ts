@@ -21,8 +21,8 @@ export class ProfilesService {
     return users;
   }
 
-  async findOne(id: Types.ObjectId): Promise<Profile> {
-    const user = await this.userService.findOne(id);
+  async findOne(username: string): Promise<Profile> {
+    const user = await this.userService.findOneByUsername(username);
     delete user.password;
     return user;
   }

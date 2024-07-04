@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { IsUserExistsRule } from './validators/rules/IsUserExists';
-import { PayloadVerifier, TokenExtractor } from '../roles/roles.guard';
 import { JwtService } from '@nestjs/jwt';
 import {
   closeInMongodConnection,
@@ -28,13 +27,7 @@ describe('UsersService', () => {
         rootMongooseTestModule(),
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
       ],
-      providers: [
-        IsUserExistsRule,
-        UsersService,
-        TokenExtractor,
-        PayloadVerifier,
-        JwtService,
-      ],
+      providers: [IsUserExistsRule, UsersService, JwtService],
     }).compile();
 
     service = module.get<UsersService>(UsersService);

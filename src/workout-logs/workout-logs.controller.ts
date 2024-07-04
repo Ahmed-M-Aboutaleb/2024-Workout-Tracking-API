@@ -46,7 +46,7 @@ export class WorkoutLogsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: Types.ObjectId) {
-    return this.workoutLogsService.remove(id);
+  delete(@Param('id') id: Types.ObjectId) {
+    return this.workoutLogsService.delete(id);
   }
 }

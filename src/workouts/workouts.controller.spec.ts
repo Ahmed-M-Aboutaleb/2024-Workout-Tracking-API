@@ -7,8 +7,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { IsArrayValidRule } from './validators/rules/IsArrayValidRule';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { IsWorkoutExistsRule } from './validators/rules/IsWorkoutExists';
-import { PayloadVerifier, TokenExtractor } from '../roles/roles.guard';
-import { JwtService } from '@nestjs/jwt';
 
 describe('WorkoutsController', () => {
   let controller: WorkoutsController;
@@ -29,14 +27,7 @@ describe('WorkoutsController', () => {
         ]),
       ],
       controllers: [WorkoutsController],
-      providers: [
-        WorkoutsService,
-        IsArrayValidRule,
-        IsWorkoutExistsRule,
-        TokenExtractor,
-        PayloadVerifier,
-        JwtService,
-      ],
+      providers: [WorkoutsService, IsArrayValidRule, IsWorkoutExistsRule],
     }).compile();
 
     controller = module.get<WorkoutsController>(WorkoutsController);
@@ -97,7 +88,7 @@ describe('WorkoutsController', () => {
       expect(updatedWorkout).toHaveProperty('equipment', 'Barbell');
     });
     it('should delete a workout', async () => {
-      const deletedWorkout = await controller.remove(createdWorkout._id);
+      const deletedWorkout = await controller.delete(createdWorkout._id);
       expect(deletedWorkout).toBeDefined();
       expect(deletedWorkout).toHaveProperty('_id', createdWorkout._id);
     });

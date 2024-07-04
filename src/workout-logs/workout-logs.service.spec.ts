@@ -95,7 +95,7 @@ describe('WorkoutLogsService', () => {
     });
 
     it('should remove a workout log', async () => {
-      const removedWorkoutLog = await service.remove(createdWorkoutLog._id);
+      const removedWorkoutLog = await service.delete(createdWorkoutLog._id);
       expect(removedWorkoutLog).toBeDefined();
       expect(removedWorkoutLog).toHaveProperty('_id', createdWorkoutLog._id);
       const workoutLogsAfterRemoval = await service.findAll();

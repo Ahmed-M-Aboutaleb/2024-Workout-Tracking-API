@@ -90,7 +90,7 @@ describe('WorkoutLogsController', () => {
 
   it('should remove a specific workout log', async () => {
     const id: Types.ObjectId = createdWorkoutLog._id;
-    const workoutLog = await controller.remove(id);
+    const workoutLog = await controller.delete(id);
     expect(workoutLog).toBeDefined();
     expect(workoutLog).toHaveProperty('_id', id);
   });

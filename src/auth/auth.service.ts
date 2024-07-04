@@ -11,6 +11,7 @@ type Token = Promise<{ access_token: string }>;
 export interface Payload {
   username: string;
   userID: string;
+  role: string;
 }
 
 @Injectable()
@@ -32,6 +33,7 @@ export class AuthService {
     const payload: Payload = {
       username: authDto.username,
       userID: user._id.toString(),
+      role: user.role,
     };
     return {
       access_token: await this.jwtService.sign(payload),

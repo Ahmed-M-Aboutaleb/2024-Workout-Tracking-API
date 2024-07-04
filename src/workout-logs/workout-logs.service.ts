@@ -38,7 +38,7 @@ export class WorkoutLogsService {
     return updatedWorkoutLog;
   }
 
-  async remove(id: Types.ObjectId): Promise<WorkoutLog> {
+  async delete(id: Types.ObjectId): Promise<WorkoutLog> {
     return await this.workoutLogModel.findByIdAndDelete(id).exec();
   }
 }

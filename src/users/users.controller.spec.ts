@@ -2,8 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { IsUserExistsRule } from './validators/rules/IsUserExists';
-import { PayloadVerifier, TokenExtractor } from '../roles/roles.guard';
-import { JwtService } from '@nestjs/jwt';
 import { rootMongooseTestModule } from '../../test/utils/db-connection';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './entities/user.entity';
@@ -27,13 +25,7 @@ describe('UsersController', () => {
         rootMongooseTestModule(),
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
       ],
-      providers: [
-        IsUserExistsRule,
-        UsersService,
-        TokenExtractor,
-        PayloadVerifier,
-        JwtService,
-      ],
+      providers: [IsUserExistsRule, UsersService],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
@@ -83,7 +75,7 @@ describe('UsersController', () => {
     });
 
     it('should remove a user', async () => {
-      const removedUser = await controller.remove(createdUser._id);
+      const removedUser = await controller.delete(createdUser._id);
       expect(removedUser).toBeDefined();
       expect(removedUser).toHaveProperty('_id', createdUser._id);
     });

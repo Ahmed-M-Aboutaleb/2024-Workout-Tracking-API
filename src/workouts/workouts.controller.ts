@@ -16,6 +16,7 @@ import { RolesGuard } from '../roles/roles.guard';
 import { Role } from '../roles/roles.decorator';
 import { Roles } from '../roles/roles.enum';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @ApiTags('Workouts')
 @ApiBearerAuth()
@@ -24,8 +25,9 @@ export class WorkoutsController {
   constructor(private readonly workoutsService: WorkoutsService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   @UseGuards(RolesGuard)
-  @Role(Roles.Admin)
+  @Role(Roles.ADMIN)
   create(@Body() createWorkoutDto: CreateWorkoutDto) {
     return this.workoutsService.create(createWorkoutDto);
   }
@@ -41,8 +43,9 @@ export class WorkoutsController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   @UseGuards(RolesGuard)
-  @Role(Roles.Admin)
+  @Role(Roles.ADMIN)
   update(
     @Param('id') id: Types.ObjectId,
     @Body() updateWorkoutDto: UpdateWorkoutDto,
@@ -51,9 +54,10 @@ export class WorkoutsController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   @UseGuards(RolesGuard)
-  @Role(Roles.Admin)
-  remove(@Param('id') id: Types.ObjectId) {
-    return this.workoutsService.remove(id);
+  @Role(Roles.ADMIN)
+  delete(@Param('id') id: Types.ObjectId) {
+    return this.workoutsService.delete(id);
   }
 }
