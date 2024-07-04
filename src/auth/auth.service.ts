@@ -47,7 +47,7 @@ export class AuthService {
     return this.login({ username: user.username, password: hashedPassword });
   }
 
-  private async hashPassword(password: string): Promise<string> {
+  async hashPassword(password: string): Promise<string> {
     return await argon2.hash(password);
   }
 }
