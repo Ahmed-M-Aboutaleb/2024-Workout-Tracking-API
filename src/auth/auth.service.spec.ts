@@ -15,12 +15,13 @@ describe('AuthService', () => {
   let service: AuthService;
   let usersService: UsersService;
   let createdUser;
-  const createUserDto = {
+  const password = 'P@ssw0rd';
+  let createUserDto = {
     firstName: 'Ahmed',
     lastName: 'Aboutaleb',
     username: 'iifire',
     email: 'ahmed.aboutaleb.work@gmail.com',
-    password: 'P@ssw0rd',
+    password: password,
   } as CreateUserDto;
 
   beforeEach(async () => {
@@ -38,7 +39,10 @@ describe('AuthService', () => {
 
     service = module.get<AuthService>(AuthService);
     usersService = module.get<UsersService>(UsersService);
-    createUserDto.password = await argon2.hash(createUserDto.password);
+    createUserDto = {
+      ...createUserDto,
+      password: await argon2.hash(password),
+    };
     createdUser = await usersService.create(createUserDto);
   });
 
@@ -48,7 +52,11 @@ describe('AuthService', () => {
 
   describe('login', () => {
     it('should return a token', async () => {
-      const token = await service.login(createUserDto);
+      const authUser = {
+        username: createUserDto.username,
+        password: password,
+      };
+      const token = await service.login(authUser);
       expect(token).toBeDefined();
       expect(token).toHaveProperty('access_token');
     });
@@ -56,10 +64,7 @@ describe('AuthService', () => {
 
   describe('validateUser', () => {
     it('should return a user', async () => {
-      const user = await service.validateUser(
-        createUserDto.username,
-        createUserDto.password,
-      );
+      const user = await service.validateUser(createUserDto.username, password);
       expect(user).toBeDefined();
       expect(user).toHaveProperty('_id', createdUser._id);
     });
@@ -67,8 +72,12 @@ describe('AuthService', () => {
 
   describe('signup', () => {
     it('should return a token', async () => {
-      createUserDto.username = 'newUser';
-      createUserDto.email = 'newTest@gmail.com';
+      createUserDto = {
+        ...createUserDto,
+        username: 'newUser',
+        email: 'newTest@gmail.com',
+        password: password,
+      };
       const token = await service.signup(createUserDto);
       expect(token).toBeDefined();
       expect(token).toHaveProperty('access_token');

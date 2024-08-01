@@ -20,38 +20,28 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @ApiTags('Users')
 @ApiBearerAuth()
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Role(Roles.ADMIN)
 @Controller({ path: 'users', version: '1' })
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
-  @UseGuards(RolesGuard)
-  @Role(Roles.ADMIN)
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
-  @UseGuards(RolesGuard)
-  @Role(Roles.ADMIN)
   findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
-  @UseGuards(RolesGuard)
-  @Role(Roles.ADMIN)
   findOne(@Param('id') id: Types.ObjectId) {
     return this.usersService.findOne(id);
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
-  @UseGuards(RolesGuard)
-  @Role(Roles.ADMIN)
   update(
     @Param('id') id: Types.ObjectId,
     @Body() updateUserDto: UpdateUserDto,
@@ -60,9 +50,6 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
-  @UseGuards(RolesGuard)
-  @Role(Roles.ADMIN)
   delete(@Param('id') id: Types.ObjectId) {
     return this.usersService.delete(id);
   }

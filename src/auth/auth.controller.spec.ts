@@ -14,12 +14,13 @@ import { PassportModule } from '@nestjs/passport';
 describe('AuthController', () => {
   let controller: AuthController;
   let usersService: UsersService;
-  const createUserDto = {
+  const password = 'P@ssw0rd';
+  let createUserDto = {
     firstName: 'Ahmed',
     lastName: 'Aboutaleb',
     username: 'iifire',
     email: 'ahmed.aboutaleb.work@gmail.com',
-    password: 'P@ssw0rd',
+    password: password,
   } as CreateUserDto;
 
   beforeEach(async () => {
@@ -38,7 +39,10 @@ describe('AuthController', () => {
 
     controller = module.get<AuthController>(AuthController);
     usersService = module.get<UsersService>(UsersService);
-    createUserDto.password = await argon2.hash(createUserDto.password);
+    createUserDto = {
+      ...createUserDto,
+      password: await argon2.hash(password),
+    };
     await usersService.create(createUserDto);
   });
 
@@ -50,7 +54,7 @@ describe('AuthController', () => {
     it('should return a token', async () => {
       const data: AuthDto = {
         username: createUserDto.username,
-        password: createUserDto.password,
+        password: password,
       };
       const token = await controller.login(data);
       expect(token).toBeDefined();
@@ -62,6 +66,7 @@ describe('AuthController', () => {
     it('should return a token', async () => {
       createUserDto.email = 'newTest@gmail.com';
       createUserDto.username = 'newTest';
+      createUserDto.password = password;
       const user = await controller.signup(createUserDto);
       expect(user).toBeDefined();
       expect(user).toHaveProperty('access_token');

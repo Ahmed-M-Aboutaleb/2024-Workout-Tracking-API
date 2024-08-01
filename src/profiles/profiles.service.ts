@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { UsersService } from '../users/users.service';
 import { Types } from 'mongoose';
@@ -15,51 +15,70 @@ export class ProfilesService {
 
   async findAll(): Promise<Profile[]> {
     const users = await this.userService.findAll();
-    users.forEach((user) => {
-      delete user.password;
+    const profiles = users.map((user) => {
+      user.password = undefined;
+      user.role = undefined;
+      return { user };
     });
-    return users;
+    return profiles;
   }
 
   async findOne(username: string): Promise<Profile> {
-    const user = await this.userService.findOneByUsername(username);
-    delete user.password;
-    return user;
+    try {
+      const user = await this.userService.findOneByUsername(username);
+      user.password = undefined;
+      user.role = undefined;
+      return { user };
+    } catch (error) {
+      throw new BadRequestException('User not found');
+    }
   }
 
   async update(
     id: Types.ObjectId,
     updateProfileDto: UpdateProfileDto,
   ): Promise<Profile> {
-    const user = await this.userService.update(id, updateProfileDto);
-    delete user.password;
-    return user;
+    try {
+      const user = await this.userService.update(id, updateProfileDto);
+      delete user.password;
+      return { user };
+    } catch (error) {
+      throw new BadRequestException('User not found');
+    }
   }
 
   async delete(id: Types.ObjectId): Promise<Profile> {
-    const user = await this.userService.delete(id);
-    delete user.password;
-    return user;
+    try {
+      const user = await this.userService.delete(id);
+      delete user.password;
+      return { user };
+    } catch (error) {
+      throw new BadRequestException('User not found');
+    }
   }
 
   async updatePassword(
     id: Types.ObjectId,
     updatePasswordDto: UpdatePasswordDto,
   ): Promise<Profile> {
-    const user = await this.userService.findOne(id);
-    const isPasswordValid = await this.authService.validateUser(
-      user.username,
-      updatePasswordDto.oldPassword,
-    );
-    if (!isPasswordValid) throw new Error('Invalid password');
-    const hashedPassword = await this.authService.hashPassword(
-      updatePasswordDto.newPassword,
-    );
-    const updatedUser = await this.userService.update(id, {
-      ...user,
-      password: hashedPassword,
-    });
-    delete updatedUser.password;
-    return updatedUser;
+    try {
+      const user = await this.userService.findOne(id);
+      console.log(user);
+      const isPasswordValid = await this.authService.validateUser(
+        user.username,
+        updatePasswordDto.oldPassword,
+      );
+      if (!isPasswordValid) throw new BadRequestException('Invalid password');
+      const hashedPassword = await this.authService.hashPassword(
+        updatePasswordDto.newPassword,
+      );
+      console.log(hashedPassword);
+      user.password = hashedPassword;
+      const updatedUser = await this.userService.update(id, user);
+      delete updatedUser.password;
+      return { user: updatedUser };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -23,21 +23,25 @@ export class AuthService {
 
   async validateUser(username: string, password: string): Promise<User> {
     const user = await this.usersService.findOneByUsername(username);
-    if (!user || (await argon2.verify(user.password, password)))
+    if (!user || !(await argon2.verify(user.password, password)))
       throw new Error('Invalid credentials');
     return user;
   }
 
   async login(authDto: AuthDto): Token {
-    const user = await this.validateUser(authDto.username, authDto.password);
-    const payload: Payload = {
-      username: authDto.username,
-      userID: user._id.toString(),
-      role: user.role,
-    };
-    return {
-      access_token: await this.jwtService.sign(payload),
-    };
+    try {
+      const user = await this.validateUser(authDto.username, authDto.password);
+      const payload: Payload = {
+        username: authDto.username,
+        userID: user._id.toString(),
+        role: user.role,
+      };
+      return {
+        access_token: await this.jwtService.sign(payload),
+      };
+    } catch (error) {
+      throw new UnauthorizedException(error.message);
+    }
   }
 
   async signup(createUserDto: CreateUserDto): Token {
@@ -46,7 +50,10 @@ export class AuthService {
       ...createUserDto,
       password: hashedPassword,
     });
-    return this.login({ username: user.username, password: hashedPassword });
+    return this.login({
+      username: user.username,
+      password: createUserDto.password,
+    });
   }
 
   async hashPassword(password: string): Promise<string> {

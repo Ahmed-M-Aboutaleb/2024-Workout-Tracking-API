@@ -25,8 +25,7 @@ export class WorkoutsController {
   constructor(private readonly workoutsService: WorkoutsService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Role(Roles.ADMIN)
   create(@Body() createWorkoutDto: CreateWorkoutDto) {
     return this.workoutsService.create(createWorkoutDto);
@@ -43,8 +42,7 @@ export class WorkoutsController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Role(Roles.ADMIN)
   update(
     @Param('id') id: Types.ObjectId,
@@ -54,8 +52,7 @@ export class WorkoutsController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Role(Roles.ADMIN)
   delete(@Param('id') id: Types.ObjectId) {
     return this.workoutsService.delete(id);
